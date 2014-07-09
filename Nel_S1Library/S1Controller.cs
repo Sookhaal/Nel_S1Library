@@ -5,14 +5,14 @@ using System.Runtime.InteropServices;
 
 namespace Nel_S1Library
 {
-	public class Nel_S1Library
+	public class S1Controller
 	{
 		private Process[] p;
 
 		/// <summary>
 		/// Modifiers Keys
 		/// </summary>
-		public enum MKeys : int
+		public enum MKeys
 		{
 			MK_LBUTTON = 0x0001,
 			MK_RBUTTON = 0x0002,
@@ -26,7 +26,7 @@ namespace Nel_S1Library
 		/// <summary>
 		/// Virtual Keys
 		/// </summary>
-		public enum VKeys : int
+		public enum VKeys
 		{
 			VK_LBUTTON = 0x01,   //Left mouse button
 			VK_RBUTTON = 0x02,   //Right mouse button
@@ -134,7 +134,7 @@ namespace Nel_S1Library
 		/// <summary>
 		/// Virtual Messages
 		/// </summary>
-		public enum WMessages : int
+		public enum WMessages
 		{
 			WM_LBUTTONDOWN = 0x201, //Left mousebutton down
 			WM_LBUTTONUP = 0x202,  //Left mousebutton up
@@ -162,50 +162,44 @@ namespace Nel_S1Library
 
 		public void LeftClick(int x, int y)
 		{
-			PostMessage(GetS1(), 0x201, 1, ToLong(x, y));
-			PostMessage(GetS1(), 0x202, 0, ToLong(x, y));
+			LeftClick(x, y, GetS1(), 0);
 		}
 
 		public void LeftClick(int x, int y, int mod)
 		{
-			PostMessage(GetS1(), 0x201, 1 + mod, ToLong(x, y));
-			PostMessage(GetS1(), 0x202, 0, ToLong(x, y));
+			LeftClick(x, y, GetS1(), mod);
 		}
 
 		public void LeftClick(int x, int y, IntPtr s1)
 		{
-			PostMessage(s1, 0x201, 1, ToLong(x, y));
-			PostMessage(s1, 0x202, 0, ToLong(x, y));
+			LeftClick(x, y, s1, 0);
 		}
 
 		public void LeftClick(int x, int y, IntPtr s1, int mod)
 		{
-			PostMessage(s1, 0x201, 1 + mod, ToLong(x, y));
-			PostMessage(s1, 0x202, 0, ToLong(x, y));
+			PostMessage(s1, (int)WMessages.WM_LBUTTONDOWN, 1 + mod, ToLong(x, y));
+			PostMessage(s1, (int)WMessages.WM_LBUTTONUP, 0, ToLong(x, y));
 		}
 
 		public void RightClick(int x, int y)
 		{
-			PostMessage(GetS1(), 0x204, 2, ToLong(x, y));
-			PostMessage(GetS1(), 0x205, 0, ToLong(x, y));
+			RightClick(x, y, GetS1(), 0);
 		}
 
 		public void RightClick(int x, int y, int mod)
 		{
-			PostMessage(GetS1(), 0x204, 2 + mod, ToLong(x, y));
-			PostMessage(GetS1(), 0x205, 0, ToLong(x, y));
+			RightClick(x, y, GetS1(), mod);
 		}
 
 		public void RightClick(int x, int y, IntPtr s1)
 		{
-			PostMessage(s1, 0x204, 2, ToLong(x, y));
-			PostMessage(s1, 0x205, 0, ToLong(x, y));
+			RightClick(x, y, s1, 0);
 		}
 
 		public void RightClick(int x, int y, IntPtr s1, int mod)
 		{
-			PostMessage(s1, 0x204, 2 + mod, ToLong(x, y));
-			PostMessage(s1, 0x205, 0, ToLong(x, y));
+			PostMessage(s1, (int)WMessages.WM_RBUTTONDOWN, 2 + mod, ToLong(x, y));
+			PostMessage(s1, (int)WMessages.WM_RBUTTONUP, 0, ToLong(x, y));
 		}
 
 		public int ToLong(int LoWord, int HiWord)
