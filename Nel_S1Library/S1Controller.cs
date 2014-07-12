@@ -9,10 +9,14 @@ namespace Nel_S1Library
 	{
 		private Process[] p;
 
-		/// <summary>
-		/// Modifiers Keys
-		/// </summary>
-		public enum MKeys
+		public enum KeyboardMod : int
+		{
+			VK_SHIFT = 0x10,   //SHIFT key
+			VK_CONTROL = 0x11,   //CTRL key
+			VK_MENU = 0x12,   //ALT key
+		}
+
+		public enum MouseMod : int
 		{
 			MK_LBUTTON = 0x0001,
 			MK_RBUTTON = 0x0002,
@@ -26,7 +30,7 @@ namespace Nel_S1Library
 		/// <summary>
 		/// Virtual Keys
 		/// </summary>
-		public enum VKeys
+		public enum VKeys : int
 		{
 			VK_LBUTTON = 0x01,   //Left mouse button
 			VK_RBUTTON = 0x02,   //Right mouse button
@@ -36,9 +40,6 @@ namespace Nel_S1Library
 			VK_TAB = 0x09,   //TAB key
 			VK_CLEAR = 0x0C,   //CLEAR key
 			VK_RETURN = 0x0D,   //ENTER key
-			VK_SHIFT = 0x10,   //SHIFT key
-			VK_CONTROL = 0x11,   //CTRL key
-			VK_MENU = 0x12,   //ALT key
 			VK_PAUSE = 0x13,   //PAUSE key
 			VK_CAPITAL = 0x14,   //CAPS LOCK key
 			VK_ESCAPE = 0x1B,   //ESC key
@@ -134,7 +135,7 @@ namespace Nel_S1Library
 		/// <summary>
 		/// Virtual Messages
 		/// </summary>
-		public enum WMessages
+		public enum WMessages : int
 		{
 			WM_LBUTTONDOWN = 0x201, //Left mousebutton down
 			WM_LBUTTONUP = 0x202,  //Left mousebutton up
@@ -144,6 +145,7 @@ namespace Nel_S1Library
 			WM_RBUTTONDBLCLK = 0x206, //Right mousebutton doubleclick
 			WM_KEYDOWN = 0x100,  //Key down
 			WM_KEYUP = 0x101,   //Key up
+			WM_CHAR = 0x102,	//Character
 		}
 
 		/// <summary>
@@ -165,7 +167,7 @@ namespace Nel_S1Library
 			LeftClick(x, y, GetS1(), 0);
 		}
 
-		public void LeftClick(int x, int y, int mod)
+		public void LeftClick(int x, int y, MouseMod mod)
 		{
 			LeftClick(x, y, GetS1(), mod);
 		}
@@ -175,9 +177,9 @@ namespace Nel_S1Library
 			LeftClick(x, y, s1, 0);
 		}
 
-		public void LeftClick(int x, int y, IntPtr s1, int mod)
+		public void LeftClick(int x, int y, IntPtr s1, MouseMod mod)
 		{
-			PostMessage(s1, (int)WMessages.WM_LBUTTONDOWN, 1 + mod, ToLong(x, y));
+			PostMessage(s1, (int)WMessages.WM_LBUTTONDOWN, 1 + (int)mod, ToLong(x, y));
 			PostMessage(s1, (int)WMessages.WM_LBUTTONUP, 0, ToLong(x, y));
 		}
 
@@ -186,7 +188,7 @@ namespace Nel_S1Library
 			RightClick(x, y, GetS1(), 0);
 		}
 
-		public void RightClick(int x, int y, int mod)
+		public void RightClick(int x, int y, MouseMod mod)
 		{
 			RightClick(x, y, GetS1(), mod);
 		}
@@ -196,16 +198,66 @@ namespace Nel_S1Library
 			RightClick(x, y, s1, 0);
 		}
 
-		public void RightClick(int x, int y, IntPtr s1, int mod)
+		public void RightClick(int x, int y, IntPtr s1, MouseMod mod)
 		{
-			PostMessage(s1, (int)WMessages.WM_RBUTTONDOWN, 2 + mod, ToLong(x, y));
+			PostMessage(s1, (int)WMessages.WM_RBUTTONDOWN, 2 + (int)mod, ToLong(x, y));
 			PostMessage(s1, (int)WMessages.WM_RBUTTONUP, 0, ToLong(x, y));
+		}
+
+		public void SendKey(VKeys key)
+		{
+			SendKey(key, 0, 0, 0, GetS1());
+		}
+
+		public void SendKey(VKeys key, IntPtr s1)
+		{
+			SendKey(key, 0, 0, 0, s1);
+		}
+
+		public void SendKey(VKeys key, KeyboardMod mod0)
+		{
+			SendKey(key, mod0, 0, 0, GetS1());
+		}
+
+		public void SendKey(VKeys key, KeyboardMod mod0, IntPtr s1)
+		{
+			SendKey(key, mod0, 0, 0, s1);
+		}
+
+		public void SendKey(VKeys key, KeyboardMod mod0, KeyboardMod mod1)
+		{
+			SendKey(key, mod0, mod1, 0, GetS1());
+		}
+
+		public void SendKey(VKeys key, KeyboardMod mod0, KeyboardMod mod1, IntPtr s1)
+		{
+			SendKey(key, mod0, mod1, 0, s1);
+		}
+
+		public void SendKey(VKeys key, KeyboardMod mod0, KeyboardMod mod1, KeyboardMod mod2)
+		{
+			SendKey(key, mod0, mod1, mod2, GetS1());
+		}
+
+		public void SendKey(VKeys key, KeyboardMod mod0, KeyboardMod mod1, KeyboardMod mod2, IntPtr s1)
+		{
+			keybd_event((int)mod2, 0, 1, 0);
+			keybd_event((int)mod1, 0, 1, 0);
+			keybd_event((int)mod0, 0, 1, 0);
+			PostMessage(s1, (int)WMessages.WM_KEYDOWN, (int)key, 1);
+			PostMessage(s1, (int)WMessages.WM_KEYUP, (int)key, 1);
+			keybd_event((int)mod2, 0, 3, 0);
+			keybd_event((int)mod1, 0, 3, 0);
+			keybd_event((int)mod0, 0, 3, 0);
 		}
 
 		public int ToLong(int LoWord, int HiWord)
 		{
 			return ((HiWord << 16) | (LoWord & 0xffff));
 		}
+
+		[DllImport("user32.dll", SetLastError = true)]
+		private static extern void keybd_event(int bVk, byte bScan, int dwFlags, int dwExtraInfo);
 
 		[DllImport("user32.dll")]
 		private static extern bool PostMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
