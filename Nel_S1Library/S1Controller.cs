@@ -241,11 +241,11 @@ namespace Nel_S1Library
 
 		public void SendKey(VKeys key, KeyboardMod mod0, KeyboardMod mod1, KeyboardMod mod2, IntPtr s1)
 		{
+			SetForegroundWindow(s1);
 			keybd_event((int)mod2, 0, 1, 0);
 			keybd_event((int)mod1, 0, 1, 0);
 			keybd_event((int)mod0, 0, 1, 0);
-			PostMessage(s1, (int)WMessages.WM_KEYDOWN, (int)key, 1);
-			PostMessage(s1, (int)WMessages.WM_KEYUP, (int)key, 1);
+			keybd_event((int)key, 0, 1, 0);
 			keybd_event((int)mod2, 0, 3, 0);
 			keybd_event((int)mod1, 0, 3, 0);
 			keybd_event((int)mod0, 0, 3, 0);
@@ -261,5 +261,8 @@ namespace Nel_S1Library
 
 		[DllImport("user32.dll")]
 		private static extern bool PostMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+		[DllImport("USER32.DLL")]
+		public static extern bool SetForegroundWindow(IntPtr hWnd);
 	}
 }

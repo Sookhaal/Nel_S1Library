@@ -28,7 +28,6 @@ namespace Example
 		private S1Controller s1Controller = new S1Controller();
 		private ImageSearch img = new ImageSearch();
 		private IntPtr s1 = IntPtr.Zero;
-
 		private List<Rectangle> location;
 		private bool fxOn = true;
 		private int offsetY = 47;
@@ -76,14 +75,24 @@ namespace Example
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			//Ctrl + Shift + Alt + S -> Save New Version... (Default shortcut)
-			//s1Controller.SendKey(S1Controller.VKeys.VK_S, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT, S1Controller.KeyboardMod.VK_MENU);
+			try
+			{
+				//Ctrl + Shift + Alt + S -> Save New Version... (Default shortcut)
+				//s1Controller.SendKey(S1Controller.VKeys.VK_S, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT, S1Controller.KeyboardMod.VK_MENU);
 
-			//Ctrl + Shift + O -> Import File... (Default shortcut)
-			//s1Controller.SendKey(S1Controller.VKeys.VK_O, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT);
+				//Ctrl + Shift + O -> Import File... (Default shortcut)
+				//s1Controller.SendKey(S1Controller.VKeys.VK_O, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT);
 
-			//Ctrl + O -> Open... (Default shortcut)
-			s1Controller.SendKey(S1Controller.VKeys.VK_O, S1Controller.KeyboardMod.VK_CONTROL);
+				//Ctrl + O -> Open... (Default shortcut)
+				s1Controller.SendKey(S1Controller.VKeys.VK_O, S1Controller.KeyboardMod.VK_CONTROL);
+
+				//F -> Toggle Autoscroll (Default shortcut)
+				//s1Controller.SendKey(S1Controller.VKeys.VK_F);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error: " + ex.Message);
+			}
 		}
 	}
 }
