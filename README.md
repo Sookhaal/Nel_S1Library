@@ -10,4 +10,3 @@ alt="Demonstration" width="480" height="360" border="10" /></a>
 
 Notes
 ========================
-Still have to add keyboard functionalities.
