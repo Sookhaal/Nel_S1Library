@@ -73,5 +73,17 @@ namespace Example
 				MessageBox.Show("Error: " + ex.Message);
 			}
 		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			//Ctrl + Shift + Alt + S -> Save New Version... (Default shortcut)
+			//s1Controller.SendKey(S1Controller.VKeys.VK_S, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT, S1Controller.KeyboardMod.VK_MENU);
+
+			//Ctrl + Shift + O -> Import File... (Default shortcut)
+			//s1Controller.SendKey(S1Controller.VKeys.VK_O, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT);
+
+			//Ctrl + O -> Open... (Default shortcut)
+			s1Controller.SendKey(S1Controller.VKeys.VK_O, S1Controller.KeyboardMod.VK_CONTROL);
+		}
 	}
 }
