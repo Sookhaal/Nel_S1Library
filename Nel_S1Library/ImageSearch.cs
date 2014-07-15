@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace Nel_S1Library.ImageSearch
+namespace Nelios.S1.Tools
 {
 	public class ImageSearch
 	{

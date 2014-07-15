@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace Nel_S1Library
+namespace Nelios.S1.Tools
 {
 	public class S1Controller
 	{
